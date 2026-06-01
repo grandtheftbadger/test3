@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tamagotchi Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #f0f8ff;
+    }
+
+    .pet {
+        font-size: 100px;
+        margin: 20px;
+    }
+
+    .stats {
+        max-width: 300px;
+        margin: auto;
+        text-align: left;
+    }
+
+    .bar {
+        height: 20px;
+        background: #ddd;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .fill {
+        height: 100%;
+        background: #4caf50;
+        width: 100%;
+        transition: width 0.3s;
+    }
+
+    button {
+        padding: 10px 15px;
+        margin: 5px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    #message {
+        font-weight: bold;
+        margin: 15px;
+    }
+</style>
+</head>
+<body>
+
+<h1>🐣 My Tamagotchi</h1>
+
+<div class="pet" id="pet">😊</div>
+
+<div class="stats">
+    Hunger
+    <div class="bar"><div class="fill" id="hungerBar"></div></div>
+
+    Happiness
+    <div class="bar"><div class="fill" id="happyBar"></div></div>
+
+    Energy
+    <div class="bar"><div class="fill" id="energyBar"></div></div>
+</div>
+
+<div>
+    <button onclick="feed()">🍎 Feed</button>
+    <button onclick="play()">⚽ Play</button>
+    <button onclick="sleepPet()">😴 Sleep</button>
+</div>
+
+<p id="message">Take care of your pet!</p>
+
+<script>
+let pet = {
+    hunger: 100,
+    happiness: 100,
+    energy: 100,
+    alive: true
+};
+
+function updateDisplay() {
+    document.getElementById("hungerBar").style.width = pet.hunger + "%";
+    document.getElementById("happyBar").style.width = pet.happiness + "%";
+    document.getElementById("energyBar").style.width = pet.energy + "%";
+
+    const face = document.getElementById("pet");
+
+    if (!pet.alive) {
+        face.textContent = "💀";
+        return;
+    }
+
+    const avg = (pet.hunger + pet.happiness + pet.energy) / 3;
+
+    if (avg > 70) face.textContent = "😊";
+    else if (avg > 40) face.textContent = "😐";
+    else face.textContent = "😢";
+}
+
+function feed() {
+    if (!pet.alive) return;
+    pet.hunger = Math.min(100, pet.hunger + 20);
+    setMessage("Yum! Thanks for the food.");
+    updateDisplay();
+}
+
+function play() {
+    if (!pet.alive) return;
+    pet.happiness = Math.min(100, pet.happiness + 20);
+    pet.energy = Math.max(0, pet.energy - 10);
+    setMessage("That was fun!");
+    updateDisplay();
+}
+
+function sleepPet() {
+    if (!pet.alive) return;
+    pet.energy = Math.min(100, pet.energy + 30);
+    setMessage("Your pet took a nap.");
+    updateDisplay();
+}
+
+function setMessage(msg) {
+    document.getElementById("message").textContent = msg;
+}
+
+function tick() {
+    if (!pet.alive) return;
+
+    pet.hunger -= 2;
+    pet.happiness -= 1;
+    pet.energy -= 1;
+
+    pet.hunger = Math.max(0, pet.hunger);
+    pet.happiness = Math.max(0, pet.happiness);
+    pet.energy = Math.max(0, pet.energy);
+
+    if (
+        pet.hunger === 0 ||
+        pet.happiness === 0 ||
+        pet.energy === 0
+    ) {
+        pet.alive = false;
+        setMessage("Your pet has passed away. Refresh to try again.");
+    }
+
+    updateDisplay();
+}
+
+setInterval(tick, 3000);
+updateDisplay();
+</script>
+
+</body>
+</html>
