@@ -3,77 +3,210 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tamagotchi Game</title>
+<title>My Tamagotchi</title>
+
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        background: #f0f8ff;
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #bde0fe, #a2d2ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Tamagotchi shell */
+.shell {
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle at top, #ffffff, #e6f4ff);
+    box-shadow:
+        0 20px 40px rgba(0,0,0,0.15),
+        inset 0 5px 15px rgba(255,255,255,0.8);
+    border: 12px solid #89c2ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Decorative speaker holes */
+.speaker {
+    position: absolute;
+    top: 80px;
+    right: 110px;
+    display: flex;
+    gap: 8px;
+}
+
+.speaker span {
+    width: 8px;
+    height: 8px;
+    background: #7a8ca5;
+    border-radius: 50%;
+}
+
+.content {
+    width: 75%;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 0;
+    color: #355070;
+}
+
+.pet {
+    font-size: 110px;
+    margin: 15px 0;
+    transition: transform 0.3s;
+}
+
+.pet:hover {
+    transform: scale(1.05);
+}
+
+.stats {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.bar {
+    height: 22px;
+    background: #dfe7fd;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.fill {
+    height: 100%;
+    width: 100%;
+    transition: width 0.3s;
+}
+
+#hungerBar {
+    background: #ff9f1c;
+}
+
+#happyBar {
+    background: #2ec4b6;
+}
+
+#energyBar {
+    background: #4361ee;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+button {
+    border: none;
+    padding: 12px 18px;
+    margin: 5px;
+    border-radius: 999px;
+    font-size: 16px;
+    cursor: pointer;
+    background: white;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+#message {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #355070;
+    min-height: 24px;
+}
+
+.status {
+    margin-top: 10px;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Small screens */
+@media (max-width: 700px) {
+    .shell {
+        width: 95vw;
+        height: 95vw;
     }
 
     .pet {
-        font-size: 100px;
-        margin: 20px;
+        font-size: 70px;
     }
 
-    .stats {
-        max-width: 300px;
-        margin: auto;
-        text-align: left;
-    }
-
-    .bar {
-        height: 20px;
-        background: #ddd;
-        margin-bottom: 10px;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-
-    .fill {
-        height: 100%;
-        background: #4caf50;
-        width: 100%;
-        transition: width 0.3s;
+    h1 {
+        font-size: 1.4rem;
     }
 
     button {
-        padding: 10px 15px;
-        margin: 5px;
-        font-size: 16px;
-        cursor: pointer;
+        font-size: 14px;
+        padding: 10px 14px;
     }
-
-    #message {
-        font-weight: bold;
-        margin: 15px;
-    }
+}
 </style>
 </head>
 <body>
 
-<h1>🐣 My Tamagotchi</h1>
+<div class="shell">
 
-<div class="pet" id="pet">😊</div>
+    <div class="speaker">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 
-<div class="stats">
-    Hunger
-    <div class="bar"><div class="fill" id="hungerBar"></div></div>
+    <div class="content">
 
-    Happiness
-    <div class="bar"><div class="fill" id="happyBar"></div></div>
+        <h1>🐣 My Tamagotchi</h1>
 
-    Energy
-    <div class="bar"><div class="fill" id="energyBar"></div></div>
+        <div class="pet" id="pet">😊</div>
+
+        <div class="stats">
+            <label>Hunger</label>
+            <div class="bar">
+                <div class="fill" id="hungerBar"></div>
+            </div>
+
+            <label>Happiness</label>
+            <div class="bar">
+                <div class="fill" id="happyBar"></div>
+            </div>
+
+            <label>Energy</label>
+            <div class="bar">
+                <div class="fill" id="energyBar"></div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button onclick="feed()">🍎 Feed</button>
+            <button onclick="play()">⚽ Play</button>
+            <button onclick="sleepPet()">😴 Sleep</button>
+        </div>
+
+        <p id="message">Take care of your pet!</p>
+        <div class="status">Stats slowly decrease every few seconds.</div>
+
+    </div>
 </div>
-
-<div>
-    <button onclick="feed()">🍎 Feed</button>
-    <button onclick="play()">⚽ Play</button>
-    <button onclick="sleepPet()">😴 Sleep</button>
-</div>
-
-<p id="message">Take care of your pet!</p>
 
 <script>
 let pet = {
@@ -95,15 +228,29 @@ function updateDisplay() {
         return;
     }
 
-    const avg = (pet.hunger + pet.happiness + pet.energy) / 3;
+    const average =
+        (pet.hunger + pet.happiness + pet.energy) / 3;
 
-    if (avg > 70) face.textContent = "😊";
-    else if (avg > 40) face.textContent = "😐";
-    else face.textContent = "😢";
+    if (average > 80) {
+        face.textContent = "😄";
+    } else if (average > 60) {
+        face.textContent = "😊";
+    } else if (average > 40) {
+        face.textContent = "😐";
+    } else if (average > 20) {
+        face.textContent = "😟";
+    } else {
+        face.textContent = "😢";
+    }
+}
+
+function setMessage(text) {
+    document.getElementById("message").textContent = text;
 }
 
 function feed() {
     if (!pet.alive) return;
+
     pet.hunger = Math.min(100, pet.hunger + 20);
     setMessage("Yum! Thanks for the food.");
     updateDisplay();
@@ -111,33 +258,29 @@ function feed() {
 
 function play() {
     if (!pet.alive) return;
+
     pet.happiness = Math.min(100, pet.happiness + 20);
     pet.energy = Math.max(0, pet.energy - 10);
+
     setMessage("That was fun!");
     updateDisplay();
 }
 
 function sleepPet() {
     if (!pet.alive) return;
+
     pet.energy = Math.min(100, pet.energy + 30);
-    setMessage("Your pet took a nap.");
+
+    setMessage("Your pet feels rested.");
     updateDisplay();
 }
 
-function setMessage(msg) {
-    document.getElementById("message").textContent = msg;
-}
-
-function tick() {
+function gameTick() {
     if (!pet.alive) return;
 
-    pet.hunger -= 2;
-    pet.happiness -= 1;
-    pet.energy -= 1;
-
-    pet.hunger = Math.max(0, pet.hunger);
-    pet.happiness = Math.max(0, pet.happiness);
-    pet.energy = Math.max(0, pet.energy);
+    pet.hunger = Math.max(0, pet.hunger - 2);
+    pet.happiness = Math.max(0, pet.happiness - 1);
+    pet.energy = Math.max(0, pet.energy - 1);
 
     if (
         pet.hunger === 0 ||
@@ -145,14 +288,14 @@ function tick() {
         pet.energy === 0
     ) {
         pet.alive = false;
-        setMessage("Your pet has passed away. Refresh to try again.");
+        setMessage("Your pet has passed away. Refresh to start again.");
     }
 
     updateDisplay();
 }
 
-setInterval(tick, 3000);
 updateDisplay();
+setInterval(gameTick, 3000);
 </script>
 
 </body>
